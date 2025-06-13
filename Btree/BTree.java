@@ -124,4 +124,28 @@ public class BTree<E extends Comparable<E>> {
         }
         return sb.toString();
     }
+
+    //Ejercicio 1
+    public boolean search(E cl) {
+        return searchRecursive(this.root, cl);
+    }
+
+    private boolean searchRecursive(BNode<E> current, E cl) {
+        if (current == null) return false;
+        int pos = 0;
+
+        // Buscar dentro del nodo actual
+        while (pos < current.count && cl.compareTo(current.keys.get(pos)) > 0) {
+            pos++;
+        }
+
+        if (pos < current.count && cl.compareTo(current.keys.get(pos)) == 0) {
+            System.out.println(cl + " se encuentra en el nodo " + current.idNode + " en la posición " + pos);
+            return true;
+        }
+
+        // Buscar en el hijo correspondiente
+        return searchRecursive(current.childs.get(pos), cl);
+    }
+
 }
