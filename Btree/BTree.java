@@ -264,5 +264,8 @@ public class BTree<E extends Comparable<E>> {
         parent.count--;
     }
 
+    //ejercicio 3
+
+
 
 }
