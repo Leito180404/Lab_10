@@ -42,11 +42,12 @@ public class BNode<E extends Comparable<E>> {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("Nodo ").append(idNode).append(": ");
+        sb.append("[idNode=").append(idNode).append(", keys=");
         for (int i = 0; i < count; i++) {
             sb.append(keys.get(i));
             if (i < count - 1) sb.append(", ");
         }
+        sb.append("]");
         return sb.toString();
     }
 }
