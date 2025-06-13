@@ -89,4 +89,39 @@ public class BTree<E extends Comparable<E>> {
         current.count--;
         return median;
     }
+
+    @Override
+    public String toString() {
+        String s = "";
+        if (isEmpty())
+            s += "BTree is empty...";
+        else
+            s = writeTree(this.root);
+        return s;
+    }
+
+    private String writeTree(BNode<E> current) {
+        if (current == null) return "";
+        StringBuilder sb = new StringBuilder();
+        sb.append("IdNodo: ").append(current.idNode).append(" | Claves: (");
+        for (int i = 0; i < current.count; i++) {
+            sb.append(current.keys.get(i));
+            if (i < current.count - 1) sb.append(", ");
+        }
+        sb.append(") | Hijos: [");
+        for (int i = 0; i <= current.count; i++) {
+            if (current.childs.get(i) != null)
+                sb.append(current.childs.get(i).idNode);
+            else
+                sb.append("null");
+            if (i < current.count) sb.append(", ");
+        }
+        sb.append("]\n");
+        for (int i = 0; i <= current.count; i++) {
+            if (current.childs.get(i) != null) {
+                sb.append(writeTree(current.childs.get(i)));
+            }
+        }
+        return sb.toString();
+    }
 }
