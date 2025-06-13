@@ -1,4 +1,4 @@
-package Excepciones;
+package Actividades.Excepciones;
 
 public class ItemDuplicated extends Exception {
     public ItemDuplicated(String msg) {
