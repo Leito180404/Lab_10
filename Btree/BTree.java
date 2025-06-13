@@ -1,5 +1,15 @@
 package Btree;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import Excepciones.ItemNoFound;
+
 public class BTree<E extends Comparable<E>> {
     private BNode<E> root;
     private int orden;
@@ -269,6 +279,71 @@ public class BTree<E extends Comparable<E>> {
 
     //ejercicio 3
 
+    public static BTree<Integer> building_Btree(String filename) throws ItemNoFound {
+            try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
+                int orden = Integer.parseInt(br.readLine().trim());
+                BTree<Integer> tree = new BTree<>(orden);
+
+                Map<Integer, BNode<Integer>> nodosPorId = new HashMap<>();
+                Map<Integer, Integer> niveles = new HashMap<>();
+                List<String> lineas = new ArrayList<>();
+
+                String linea;
+                while ((linea = br.readLine()) != null) {
+                    lineas.add(linea);
+                }
+
+                for (String l : lineas) {
+                    String[] partes = l.split(",");
+                    int nivel = Integer.parseInt(partes[0]);
+                    int id = Integer.parseInt(partes[1]);
+                    BNode<Integer> nodo = new BNode<>(orden);
+                    nodo.idNode = id;
+                    int i = 0;
+                    for (int j = 2; j < partes.length; j++) {
+                        nodo.keys.set(i++, Integer.parseInt(partes[j]));
+                    }
+                    nodo.count = i;
+                    nodosPorId.put(id, nodo);
+                    niveles.put(id, nivel);
+                }
+
+                for (Map.Entry<Integer, BNode<Integer>> entry : nodosPorId.entrySet()) {
+                    int idPadre = entry.getKey();
+                    BNode<Integer> padre = entry.getValue();
+                    int nivelPadre = niveles.get(idPadre);
+
+                    for (Map.Entry<Integer, Integer> hijoEntry : niveles.entrySet()) {
+                        int idHijo = hijoEntry.getKey();
+                        int nivelHijo = hijoEntry.getValue();
+                        if (nivelHijo == nivelPadre + 1) {
+                            BNode<Integer> hijo = nodosPorId.get(idHijo);
+                            for (int i = 0; i <= padre.count; i++) {
+                                if (padre.childs.get(i) == null) {
+                                    padre.childs.set(i, hijo);
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                BNode<Integer> raiz = null;
+                for (Map.Entry<Integer, Integer> e : niveles.entrySet()) {
+                    if (e.getValue() == 0) {
+                        raiz = nodosPorId.get(e.getKey());
+                        break;
+                    }
+                }
+
+                if (raiz == null) throw new ItemNoFound("No se encontro raiz para construir el arbol.");
+
+                tree.setRoot(raiz);
+                return tree;
+            } catch (IOException | NumberFormatException e) {
+                throw new ItemNoFound("Error al construir el arbol desde archivo: " + e.getMessage());
+            }
+        }
 
 
 
