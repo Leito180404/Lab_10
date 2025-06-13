@@ -17,6 +17,7 @@ public class Test3 {
         } catch (ItemNoFound e) {
             System.err.println("\n\u274C Error al construir el árbol: " + e.getMessage());
         }
+        scanner.close();
     }
 }
 
