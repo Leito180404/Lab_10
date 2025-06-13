@@ -148,4 +148,6 @@ public class BTree<E extends Comparable<E>> {
         return searchRecursive(current.childs.get(pos), cl);
     }
 
+    //ejercicio 2
+
 }
