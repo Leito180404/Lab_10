@@ -33,6 +33,7 @@ public class Test2 {
 
         System.out.println("\narbol despues de eliminar:");
         System.out.println(btree);
+        sc.close();
     }
 }
 
