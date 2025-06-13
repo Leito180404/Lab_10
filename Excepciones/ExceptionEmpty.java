@@ -1,4 +1,4 @@
-package Actividades.Excepciones;
+package Excepciones;
 
 public class ExceptionEmpty extends Exception {
     public ExceptionEmpty(String msg) {
