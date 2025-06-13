@@ -32,6 +32,7 @@ public class Test1 {
         boolean resultado = btree.search(buscar);
 
         System.out.println("Resultado: " + resultado);
+        sc.close();
     }
 }
 
