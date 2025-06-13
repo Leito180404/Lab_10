@@ -150,4 +150,119 @@ public class BTree<E extends Comparable<E>> {
 
     //ejercicio 2
 
+    public void remove(E cl) {
+        if (!removeRecursive(this.root, cl)) {
+            System.out.println("Clave no encontrada para eliminar.");
+            return;
+        }
+        if (root.count == 0 && root.childs.get(0) != null) {
+            root = root.childs.get(0); // Eliminamos raiz que no tiene nada
+        } else if (root.count == 0) {
+            root = null; // arbol vacio
+        }
+    }
+
+    private boolean removeRecursive(BNode<E> node, E cl) {
+        if (node == null) return false;
+        int i = 0;
+
+        while (i < node.count && cl.compareTo(node.keys.get(i)) > 0) i++;
+
+        if (i < node.count && cl.compareTo(node.keys.get(i)) == 0) {
+            if (node.childs.get(i) == null) { // Nodo hoja
+                for (int j = i; j < node.count - 1; j++) {
+                    node.keys.set(j, node.keys.get(j + 1));
+                    node.childs.set(j + 1, node.childs.get(j + 2));
+                }
+                node.keys.set(node.count - 1, null);
+                node.childs.set(node.count, null);
+                node.count--;
+            } else { // Nodo interno
+                BNode<E> predNode = node.childs.get(i);
+                while (predNode.childs.get(predNode.count) != null)
+                    predNode = predNode.childs.get(predNode.count);
+                E pred = predNode.keys.get(predNode.count - 1);
+                node.keys.set(i, pred);
+                removeRecursive(node.childs.get(i), pred);
+            }
+        } else {
+            boolean result = removeRecursive(node.childs.get(i), cl);
+            if (node.childs.get(i) != null && node.childs.get(i).count < (orden - 1) / 2) {
+                fixUnderflow(node, i);
+            }
+            return result;
+        }
+        return true;
+    }
+
+    private void fixUnderflow(BNode<E> parent, int idx) {
+        BNode<E> child = parent.childs.get(idx);
+        BNode<E> left = idx > 0 ? parent.childs.get(idx - 1) : null;
+        BNode<E> right = idx < parent.count ? parent.childs.get(idx + 1) : null;
+
+        if (left != null && left.count > (orden - 1) / 2) {
+            // Redistribucion con hermano izquierdo
+            for (int j = child.count; j > 0; j--) {
+                child.keys.set(j, child.keys.get(j - 1));
+                child.childs.set(j + 1, child.childs.get(j));
+            }
+            child.childs.set(1, child.childs.get(0));
+            child.keys.set(0, parent.keys.get(idx - 1));
+            child.childs.set(0, left.childs.get(left.count));
+            child.count++;
+
+            parent.keys.set(idx - 1, left.keys.get(left.count - 1));
+            left.keys.set(left.count - 1, null);
+            left.childs.set(left.count, null);
+            left.count--;
+        } else if (right != null && right.count > (orden - 1) / 2) {
+            // Redistribucin con hermano derecho
+            child.keys.set(child.count, parent.keys.get(idx));
+            child.childs.set(child.count + 1, right.childs.get(0));
+            child.count++;
+
+            parent.keys.set(idx, right.keys.get(0));
+
+            for (int j = 0; j < right.count - 1; j++) {
+                right.keys.set(j, right.keys.get(j + 1));
+                right.childs.set(j, right.childs.get(j + 1));
+            }
+            right.childs.set(right.count - 1, right.childs.get(right.count));
+            right.keys.set(right.count - 1, null);
+            right.childs.set(right.count, null);
+            right.count--;
+        } else {
+            // Fusion
+            if (left != null) {
+                fuse(parent, idx - 1);
+            } else if (right != null) {
+                fuse(parent, idx);
+            }
+        }
+    }
+
+    private void fuse(BNode<E> parent, int idx) {
+        BNode<E> left = parent.childs.get(idx);
+        BNode<E> right = parent.childs.get(idx + 1);
+
+        left.keys.set(left.count, parent.keys.get(idx));
+        left.count++;
+
+        for (int i = 0; i < right.count; i++) {
+            left.keys.set(left.count, right.keys.get(i));
+            left.childs.set(left.count, right.childs.get(i));
+            left.count++;
+        }
+        left.childs.set(left.count, right.childs.get(right.count));
+
+        for (int i = idx; i < parent.count - 1; i++) {
+            parent.keys.set(i, parent.keys.get(i + 1));
+            parent.childs.set(i + 1, parent.childs.get(i + 2));
+        }
+        parent.keys.set(parent.count - 1, null);
+        parent.childs.set(parent.count, null);
+        parent.count--;
+    }
+
+
 }
