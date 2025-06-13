@@ -1,4 +1,4 @@
-package Btree;
+package Actividades.Btree;
 
 public class BTree<E extends Comparable<E>> {
     private BNode<E> root;
