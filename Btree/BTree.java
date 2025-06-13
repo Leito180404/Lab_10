@@ -90,17 +90,7 @@ public class BTree<E extends Comparable<E>> {
         return median;
     }
 
-    @Override
-    public String toString() {
-        String s = "";
-        if (isEmpty())
-            s += "BTree is empty...";
-        else
-            s = writeTree(this.root);
-        return s;
-    }
-
-    private String writeTree(BNode<E> current) {
+    private String writeTree(BNode<E> current, BNode<E> parent) {
         if (current == null) return "";
         StringBuilder sb = new StringBuilder();
         sb.append("IdNodo: ").append(current.idNode).append(" | Claves: (");
@@ -108,7 +98,9 @@ public class BTree<E extends Comparable<E>> {
             sb.append(current.keys.get(i));
             if (i < current.count - 1) sb.append(", ");
         }
-        sb.append(") | Hijos: [");
+        sb.append(") | Id.Padre: ");
+        sb.append(parent != null ? parent.idNode : "--");
+        sb.append(" | Hijos: [");
         for (int i = 0; i <= current.count; i++) {
             if (current.childs.get(i) != null)
                 sb.append(current.childs.get(i).idNode);
@@ -119,11 +111,18 @@ public class BTree<E extends Comparable<E>> {
         sb.append("]\n");
         for (int i = 0; i <= current.count; i++) {
             if (current.childs.get(i) != null) {
-                sb.append(writeTree(current.childs.get(i)));
+                sb.append(writeTree(current.childs.get(i), current));
             }
         }
         return sb.toString();
     }
+
+    @Override
+    public String toString() {
+        if (isEmpty()) return "BTree is empty...";
+        return writeTree(this.root, null);
+    }
+
 
     //Ejercicio 1
     public boolean search(E cl) {
