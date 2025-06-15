@@ -153,7 +153,7 @@ public class BTree<E extends Comparable<E>> {
         }
 
         if (pos < current.count && cl.compareTo(current.keys.get(pos)) == 0) {
-            System.out.println(cl + " se encuentra en el nodo " + current.idNode + " en la posición " + pos);
+            System.out.println(cl + " se encuentra en el nodo " + current.idNode + " en la posicion " + pos);
             return true;
         }
 
