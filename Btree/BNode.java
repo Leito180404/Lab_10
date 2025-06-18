@@ -10,27 +10,21 @@ public class BNode<E extends Comparable<E>> {
 
     public BNode(int n) {
         this.keys = new ArrayList<>(n);
-        this.childs = new ArrayList<>(n);
+        this.childs = new ArrayList<>(n + 1);
         this.count = 0;
         this.idNode = nodeCounter++;
-        for (int i = 0; i < n; i++) {
-            this.keys.add(null);
-            this.childs.add(null);
-        }
+        for (int i = 0; i < n; i++) this.keys.add(null);
+        for (int i = 0; i <= n; i++) this.childs.add(null);
     }
-
     public BNode(int n, int forcedId) {
         this.keys = new ArrayList<>(n);
-        this.childs = new ArrayList<>(n);
+        this.childs = new ArrayList<>(n + 1);
         this.count = 0;
-        this.idNode = forcedId; 
-        for (int i = 0; i < n; i++) {
-            this.keys.add(null);
-            this.childs.add(null);
-        }
+        this.idNode = forcedId;
+        for (int i = 0; i < n; i++) this.keys.add(null);
+        for (int i = 0; i <= n; i++) this.childs.add(null);
     }
-
-
+    
     public boolean nodeFull(int maxKeys) {
         return count == maxKeys;
     }
