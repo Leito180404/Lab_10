@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -308,25 +310,30 @@ public class BTree<E extends Comparable<E>> {
                     niveles.put(id, nivel);
                 }
 
-                for (Map.Entry<Integer, BNode<Integer>> entry : nodosPorId.entrySet()) {
-                    int idPadre = entry.getKey();
-                    BNode<Integer> padre = entry.getValue();
+                List<Integer> idsOrdenados = new ArrayList<>(nodosPorId.keySet());
+                idsOrdenados.sort(Comparator
+                    .comparingInt((Integer id) -> niveles.get(id))
+                    .thenComparingInt(Integer::intValue));
+                for (Integer idPadre : idsOrdenados) {
+                    BNode<Integer> padre = nodosPorId.get(idPadre);
                     int nivelPadre = niveles.get(idPadre);
+                    if (nivelPadre == 2) continue;
 
-                    for (Map.Entry<Integer, Integer> hijoEntry : niveles.entrySet()) {
-                        int idHijo = hijoEntry.getKey();
-                        int nivelHijo = hijoEntry.getValue();
-                        if (nivelHijo == nivelPadre + 1) {
+                    for (Integer idHijo : idsOrdenados) {
+                        if (niveles.get(idHijo) == nivelPadre + 1) {
                             BNode<Integer> hijo = nodosPorId.get(idHijo);
-                            for (int i = 0; i <= padre.count; i++) {
-                                if (padre.childs.get(i) == null) {
-                                    padre.childs.set(i, hijo);
-                                    break;
+                            if (!padre.childs.contains(hijo)) {
+                                for (int i = 0; i <= padre.count; i++) {
+                                    if (padre.childs.get(i) == null) {
+                                        padre.childs.set(i, hijo);
+                                        break;
+                                    }
                                 }
                             }
                         }
                     }
                 }
+
 
                 BNode<Integer> raiz = null;
                 for (Map.Entry<Integer, Integer> e : niveles.entrySet()) {
