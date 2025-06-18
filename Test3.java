@@ -15,7 +15,7 @@ public class Test3 {
             System.out.println("Arbol B construido con éxito desde archivo:");
             System.out.println(arbol);
         } catch (ItemNoFound e) {
-            System.err.println("\n\u274C Error al construir el árbol: " + e.getMessage());
+            System.err.println("\n\u274C Error al construir el arbol: " + e.getMessage());
         }
         scanner.close();
     }
