@@ -12,7 +12,7 @@ public class Test3 {
 
         try {
             BTree<Integer> arbol = BTree.building_Btree(ruta);
-            System.out.println("Arbol B construido con éxito desde archivo:");
+            System.out.println("Arbol B construido con exito desde archivo:");
             System.out.println(arbol);
         } catch (ItemNoFound e) {
             System.err.println("\n\u274C Error al construir el arbol: " + e.getMessage());
