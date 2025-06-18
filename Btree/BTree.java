@@ -297,8 +297,8 @@ public class BTree<E extends Comparable<E>> {
                     String[] partes = l.split(",");
                     int nivel = Integer.parseInt(partes[0]);
                     int id = Integer.parseInt(partes[1]);
-                    BNode<Integer> nodo = new BNode<>(orden);
-                    nodo.idNode = id;
+                    BNode<Integer> nodo = new BNode<>(orden, id);
+
                     int i = 0;
                     for (int j = 2; j < partes.length; j++) {
                         nodo.keys.set(i++, Integer.parseInt(partes[j]));
