@@ -1,4 +1,4 @@
-public class RegistroEstudiante implements Comparable<RegistroEstudiante> {
+public class RegistroEstudiante implements Comparable<Object> {
     private int codigo;
     private String nombre;
 
@@ -11,12 +11,17 @@ public class RegistroEstudiante implements Comparable<RegistroEstudiante> {
     public String getNombre() { return nombre; }
 
     @Override
-    public int compareTo(RegistroEstudiante otro) {
-        return Integer.compare(this.codigo, otro.codigo);
-    }
-
-    @Override
     public String toString() {
         return codigo + " - " + nombre;
     }
+
+    @Override
+    public int compareTo(Object obj) {
+        if (!(obj instanceof RegistroEstudiante)) {
+            return -1;
+        }
+        RegistroEstudiante otro = (RegistroEstudiante) obj;
+        return Integer.compare(this.codigo, otro.codigo);
+    }
+
 }
