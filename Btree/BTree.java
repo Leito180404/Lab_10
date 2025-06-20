@@ -286,6 +286,7 @@ public class BTree<E extends Comparable<E>> {
 
             Map<Integer, BNode<Integer>> nodosPorId = new HashMap<>();
             Map<Integer, Integer> niveles = new HashMap<>();
+            List<Integer> ordenArchivo = new ArrayList<>();
 
             String linea;
             while ((linea = br.readLine()) != null) {
@@ -300,20 +301,14 @@ public class BTree<E extends Comparable<E>> {
                 nodo.count = i;
                 nodosPorId.put(id, nodo);
                 niveles.put(id, nivel);
+                ordenArchivo.add(id);
             }
 
-            // Ordenar IDs por niveles primero
-            List<Integer> idsOrdenados = new ArrayList<>(nodosPorId.keySet());
-            idsOrdenados.sort(Comparator
-                    .comparingInt((Integer id) -> niveles.get(id))
-                    .thenComparingInt(Integer::intValue));
-
-            // Conectar hijos solo cuando los padres ya están procesados
-            for (Integer idPadre : idsOrdenados) {
+            for (int idPadre : ordenArchivo) {
                 BNode<Integer> padre = nodosPorId.get(idPadre);
                 int nivelPadre = niveles.get(idPadre);
-                
-                for (Integer idHijo : idsOrdenados) {
+
+                for (int idHijo : ordenArchivo) {
                     if (niveles.get(idHijo) == nivelPadre + 1) {
                         BNode<Integer> hijo = nodosPorId.get(idHijo);
                         if (!padre.childs.contains(hijo)) {
@@ -328,20 +323,17 @@ public class BTree<E extends Comparable<E>> {
                 }
             }
 
-            // Definir la raíz (nivel 0)
             BNode<Integer> raiz = null;
-            for (Map.Entry<Integer, Integer> e : niveles.entrySet()) {
-                if (e.getValue() == 0) {
-                    raiz = nodosPorId.get(e.getKey());
+            for (int id : ordenArchivo) {
+                if (niveles.get(id) == 0) {
+                    raiz = nodosPorId.get(id);
                     break;
                 }
             }
 
             if (raiz == null) throw new ItemNoFound("No se encontro raiz para construir el arbol.");
-
             tree.setRoot(raiz);
             return tree;
-
         } catch (IOException | NumberFormatException e) {
             throw new ItemNoFound("Error al construir el arbol desde archivo: " + e.getMessage());
         }
