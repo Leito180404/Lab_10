@@ -6,8 +6,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import Excepciones.ItemNoFound;
 
@@ -304,19 +306,20 @@ public class BTree<E extends Comparable<E>> {
                 ordenArchivo.add(id);
             }
 
+            Set<Integer> hijosAsignados = new HashSet<>();
+
             for (int idPadre : ordenArchivo) {
                 BNode<Integer> padre = nodosPorId.get(idPadre);
                 int nivelPadre = niveles.get(idPadre);
 
                 for (int idHijo : ordenArchivo) {
-                    if (niveles.get(idHijo) == nivelPadre + 1) {
+                    if (niveles.get(idHijo) == nivelPadre + 1 && !hijosAsignados.contains(idHijo)) {
                         BNode<Integer> hijo = nodosPorId.get(idHijo);
-                        if (!padre.childs.contains(hijo)) {
-                            for (int i = 0; i <= padre.count; i++) {
-                                if (padre.childs.get(i) == null) {
-                                    padre.childs.set(i, hijo);
-                                    break;
-                                }
+                        for (int i = 0; i <= padre.count; i++) {
+                            if (padre.childs.get(i) == null) {
+                                padre.childs.set(i, hijo);
+                                hijosAsignados.add(idHijo);
+                                break;
                             }
                         }
                     }
