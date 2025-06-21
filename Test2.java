@@ -12,16 +12,16 @@ public class Test2 {
             btree.insert(clave);
         }
 
-        System.out.println("\nÁrbol antes de eliminar:");
+        System.out.println("\narbol antes de eliminar:");
         System.out.println(btree);
 
         Scanner sc = new Scanner(System.in);
-        System.out.println("\nIngresa una clave para eliminar del árbol:");
+        System.out.println("\nIngresa una clave para eliminar del arbol:");
         int eliminar = sc.nextInt();
 
         btree.remove(eliminar);
 
-        System.out.println("\nÁrbol después de eliminar:");
+        System.out.println("\narbol despues de eliminar:");
         System.out.println(btree);
         sc.close();
     }
