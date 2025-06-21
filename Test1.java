@@ -1,23 +1,12 @@
 import java.util.Scanner;
-
 import Btree.BTree;
 
 public class Test1 {
     public static void main(String[] args) {
-        BTree<Integer> btree = new BTree<>(4); // Orden 4 como en la figura 10.14
+        BTree<Integer> btree = new BTree<>(5); // Orden 5 como en la actividad
 
-        int[] claves = {
-            31,
-            12, 19,
-            3, 10,
-            13, 16,
-            22, 25, 28,
-            41, 57, 63,
-            33, 35, 40,
-            49, 52, 55,
-            60, 62,
-            67, 70, 72
-        };
+        // Insertar las claves del árbol final
+        int[] claves = {100, 50, 20, 70, 10, 30, 80, 90, 200, 25, 15, 5, 65, 35, 60, 18, 93, 94};
 
         for (int clave : claves) {
             btree.insert(clave);
@@ -27,7 +16,7 @@ public class Test1 {
         System.out.println(btree);
 
         Scanner sc = new Scanner(System.in);
-        System.out.println("\nIngresa una clave para buscar en el arbol:");
+        System.out.println("\nIngresa una clave para buscar en el árbol:");
         int buscar = sc.nextInt();
         boolean resultado = btree.search(buscar);
 
